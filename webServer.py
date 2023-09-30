@@ -14,14 +14,14 @@ def webServer(port=13331):
     serverSocket.listen(1)
     # Fill in end
     print("The server is ready to accept ")
-    #while True:
+    while True:
         # Establish the connection
 
-    print('Ready to serve...')
-    connectionSocket, addr = serverSocket.accept()  # Fill in start -are you accepting connections?     #Fill in end
+        print('Ready to serve...')
+        connectionSocket, addr = serverSocket.accept()  # Fill in start -are you accepting connections?     #Fill in end
 
-    try:
-            message = connectionSocket.recv(1024)
+        try:
+            message = connectionSocket.recv(2048).decode()
             # Fill in start -a client is sending you a message   #Fill in end
             filename = message.split()[1]
 
@@ -30,40 +30,44 @@ def webServer(port=13331):
             f = open(filename[1:])  # fill in start
             outputdata = f.read()  # #fill in end
             # fill in end
-            #f.close()
+            f.close()
             # This variable can store the headers you want to send for any valid or invalid request.   What header
             # should be sent for a response that is ok?
             header = 'HTTP/1.1 200 OK\n'
+            header += "Content-Type: text/html; charset=UTF-8\r\n"
+            header += "Content-Length: " + str(len(outputdata)) + "\r\n"
+            header += "\r\n"
             # Fill in start
             connectionSocket.send(header.encode())
             # Content-Type is an example on how to send a header as bytes. There are more!
-            connectionSocket.send(b"Content-Type: text/html; charset=UTF-8\r\n")
+            #connectionSocket.send(b"Content-Type: text/html; charset=UTF-8\r\n")
 
             # Note that a complete header must end with a blank line, creating the four-byte sequence "\r\n\r\n"
             # Refer to https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/TCPSockets.html
-            connectionSocket.send('\r\n\r\n'.encode())
-            connectionSocket.send(outputdata)
+            connectionSocket.send(outputdata.encode())
             # Fill in end
             #for i in f:  # for line in file
                 # Fill in start - append your html file contents #Fill in end
                 # Send the content of the requested file to the client (don't forget the headers you created)!
-            connectionSocket.send(outputdata.encode())
             # Fill in start
 
             # Fill in end
 
             connectionSocket.close()  # closing the connection socket
 
-    except Exception:
+        except IOError:
             # Send response message for invalid request due to the file not being found (404)
+            header = 'HTTP/1.1 404 Not Found \r\n\r\n'
+            response = "<html><head></head><body><h1>404 Not Found</h1></body></html>"
             # Remember the format you used in the try: block!
             # Fill in start
-            connectionSocket.send('HTTP/1.1 404 Not Found \n'.encode())
+            connectionSocket.send(header.encode())
+            connectionSocket.send(response.encode())
             # Fill in end
 
             # Close client socket
             connectionSocket.close()
-            #break
+            break
             # Fill in start
 
             # Fill in end
