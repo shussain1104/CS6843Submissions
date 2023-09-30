@@ -60,11 +60,9 @@ def webServer(port=13331):
         except Exception:
             # Send response message for invalid request due to the file not being found (404)
             # Remember the format you used in the try: block!
-            header = 'HTTP/1.1 404 Not Found \r\n\r\n'
-            response = "<html><head></head><body><h1>404 Not Found</h1></body></html>"
             # Fill in start
-            connectionSocket.send(header.encode())
-            connectionSocket.send(response.encode())
+            connectionSocket.send('HTTP/1.1 404 Not Found \r\n\r\n'.encode())
+            connectionSocket.send("<html><head></head><body><h1>404 Not Found</h1></body></html>".encode())
             # Fill in end
             # Close client socket
             connectionSocket.close()
