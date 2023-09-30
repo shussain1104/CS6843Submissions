@@ -27,28 +27,29 @@ def webServer(port=13331):
 
             # opens the client requested file. Plenty of guidance online on how to open and read a file in python.
             # How should you read it though if you plan on sending it through a socket?
-            f = open(filename[1:], 'rb')  # fill in start
-            outputdata = f.read()  # #fill in end
+            f = open(filename[1:])  # fill in start
+            # fill in end
 
             # fill in end
-            f.close()
+            # f.close()
             # This variable can store the headers you want to send for any valid or invalid request.   What header
             # should be sent for a response that is ok?
             header = 'HTTP/1.1 200 OK\n'
             # Fill in start
-            connectionSocket.send(header.encode())
             # Content-Type is an example on how to send a header as bytes. There are more!
-            #outputdata = b"Content-Type: text/html; charset=UTF-8\r\n"
+            outputdata = b"Content-Type: text/html; charset=UTF-8\r\n"
 
             # Note that a complete header must end with a blank line, creating the four-byte sequence "\r\n\r\n"
             # Refer to https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/TCPSockets.html
-            connectionSocket.send('\r\n\r\n'.encode())
-            connectionSocket.send(outputdata)
+            headerend = '\r\n\r\n'
+            # connectionSocket.send(outputdata)
             # Fill in end
-            for i in range(0,len(outputdata)):  # for line in file
+            for i in f:  # for line in file
                 # Fill in start - append your html file contents #Fill in end
+                connectionSocket.send(header.encode())
+                connectionSocket.send(headerend.encode())
                 # Send the content of the requested file to the client (don't forget the headers you created)!
-                connectionSocket.send(outputdata[i].encode())
+                connectionSocket.send(f[i].encode())
             # Fill in start
 
             # Fill in end
