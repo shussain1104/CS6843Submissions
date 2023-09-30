@@ -15,10 +15,8 @@ def webServer(port=13331):
     # Fill in start
     serverSocket.listen(1)
     # Fill in end
-    print("The server is ready to accept ")
     while True:
         # Establish the connection
-        print('Ready to serve...')
         connectionSocket, addr = serverSocket.accept()  # Fill in start -are you accepting connections?     #Fill in end
 
         try:
