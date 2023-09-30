@@ -21,42 +21,39 @@ def webServer(port=13331):
         connectionSocket, addr = serverSocket.accept()  # Fill in start -are you accepting connections?     #Fill in end
 
         try:
-            message = connectionSocket.recv(1024).decode()
+            message = connectionSocket.recv(2048).decode()
             # Fill in start -a client is sending you a message   #Fill in end
             filename = message.split()[1]
 
             # opens the client requested file. Plenty of guidance online on how to open and read a file in python.
             # How should you read it though if you plan on sending it through a socket?
             f = open(filename[1:])  # fill in start
-            # fill in end
+            outputdata = f.read()  # #fill in end
 
             # fill in end
-            # f.close()
+            f.close()
             # This variable can store the headers you want to send for any valid or invalid request.   What header
             # should be sent for a response that is ok?
-            header = 'HTTP/1.1 200 OK\n'
             # Fill in start
+            connectionSocket.send('HTTP/1.1 200 OK\n', 'UTF-8')
             # Content-Type is an example on how to send a header as bytes. There are more!
-            outputdata = b"Content-Type: text/html; charset=UTF-8\r\n"
 
             # Note that a complete header must end with a blank line, creating the four-byte sequence "\r\n\r\n"
             # Refer to https://w3.cs.jmu.edu/kirkpams/OpenCSF/Books/csf/html/TCPSockets.html
-            headerend = '\r\n\r\n'
-            # connectionSocket.send(outputdata)
+            connectionSocket.send('\r\n\r\n'.encode())
+            connectionSocket.send(outputdata)
             # Fill in end
-            for i in f:  # for line in file
+            # for line in file
                 # Fill in start - append your html file contents #Fill in end
-                connectionSocket.send(header.encode())
-                connectionSocket.send(headerend.encode())
                 # Send the content of the requested file to the client (don't forget the headers you created)!
-                connectionSocket.send(f[i].encode())
+            connectionSocket.send(outputdata.encode())
             # Fill in start
 
             # Fill in end
 
             connectionSocket.close()  # closing the connection socket
 
-        except Exception as e:
+        except Exception:
             # Send response message for invalid request due to the file not being found (404)
             # Remember the format you used in the try: block!
             # Fill in start
