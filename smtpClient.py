@@ -6,8 +6,6 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
     endmsg = "\r\n.\r\n"
 
     # Choose a mail server (e.g. Google mail server) if you want to verify the script beyond GradeScope
-    mailserver = 'smtp.google.com'
-    port = 1025
     # Create socket called clientSocket and establish a TCP connection with mailserver and port
     # Fill in start
     clientSocket = socket(AF_INET, SOCK_STREAM)
@@ -27,21 +25,21 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
     #    print('250 reply not received from server.')
 
     # Send MAIL FROM command and handle server response.
-    mailfromcommand = 'Mail From: \t Test1\t\r\n'
+    mailfromcommand = 'MAIL FROM:\r\n'
     clientSocket.send(mailfromcommand.encode())
     # Fill in start
     recv2 = clientSocket.recv(1024).decode()
     # Fill in end
 
     # Send RCPT TO command and handle server response.
-    rcpttocommand = 'Rcpt To: \t Test2 \t\r\n'
+    rcpttocommand = 'RCPT TO: \r\n'
     clientSocket.send(rcpttocommand.encode())
     # Fill in start
     recv3 = clientSocket.recv(1024).decode()
     # Fill in end
 
     # Send DATA command and handle server response.
-    dataCommand = 'Data\t\r\n'
+    dataCommand = 'DATA\r\n'
     clientSocket.write(dataCommand.encode())
     # Fill in start
     recv4 = clientSocket.recv(1024).decode()
@@ -60,11 +58,11 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
     # Fill in end
 
     # Send QUIT command and handle server response.
-    quitCommand = 'Quit\t\r\n'
+    quitCommand = 'QUIT\r\n'
     # Fill in start
     clientSocket.send(quitCommand.encode())
     # Fill in end
-    recv6 = clientSocket.recv(1024).decode(cd)
+    recv6 = clientSocket.recv(1024).decode()
 
 
 if __name__ == '__main__':
