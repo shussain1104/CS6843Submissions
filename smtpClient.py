@@ -9,7 +9,8 @@ def smtp_client(port=1025, mailserver='127.0.0.1'):
     # Create socket called clientSocket and establish a TCP connection with mailserver and port
     # Fill in start
     clientSocket = socket(AF_INET, SOCK_STREAM)
-    clientSocket.bind((mailserver, port))
+    mailserver = 'smtp.google.com'
+    port = 1025
     # Fill in end
     clientSocket.connect((mailserver, port))
     recv = clientSocket.recv(1024).decode()
