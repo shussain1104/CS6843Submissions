@@ -129,8 +129,8 @@ def run_dns_server():
                     for pref, server in answer_data:
                         rdata_list.append(MX(dns.rdataclass.IN, dns.rdatatype.MX, pref, server))
                 elif qtype == dns.rdatatype.SOA:
-                    origin,mailbox,serial,refresh,retry,expire, minimum  = answer_data # What is the record format? See dns_records dictionary. Assume we handle @, Class, TTL elsewhere. Do some research on SOA Records
-                    rdata = SOA(dns.rdataclass.IN, dns.rdatatype.SOA, origin,mailbox,serial,refresh,retry,expire, minimum ) # follow format from previous line
+                    mname, rname, serial, refresh, retry, expire, minimum = answer_data # What is the record format? See dns_records dictionary. Assume we handle @, Class, TTL elsewhere. Do some research on SOA Records
+                    rdata = SOA(dns.rdataclass.IN, dns.rdatatype.SOA, mname, rname, serial,refresh,retry,expire, minimum ) # follow format from previous line
                     rdata_list.append(rdata)
                 else:
                     if isinstance(answer_data, str):
@@ -146,7 +146,7 @@ def run_dns_server():
 
             # Send the response back to the client using the `server_socket.sendto` method and put the response to_wire(), return to the addr you received from
             print("Responding to request:", qname)
-            server_socket.sendto(response.to_wire(),addr)
+            server_socket.sendto(response.to_wire(), addr)
         except KeyboardInterrupt:
             print('\nExiting...')
             server_socket.close()
